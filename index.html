@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SJ Chart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #link-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        #link-container a {
+            font-size: 60%; /* 버튼 텍스트 크기를 60%로 설정 */
+            color: #007bff;
+            text-decoration: none;
+            border: 1px solid #007bff;
+            padding: 5px 8px; /* 버튼의 패딩도 줄임 */
+            border-radius: 5px;
+            background-color: #e7f0ff;
+            margin: 0 5px;
+            white-space: nowrap;
+        }
+        #link-container a:hover {
+            background-color: #d0e4ff;
+        }
+        #header-content {
+            font-size: 100%; /* 텍스트 크기를 60%로 설정 */
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        #main-content {
+            margin-top: 60px; /* Adjust to match the height of the fixed header */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        #slideshow-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+        }
+        #slideshow {
+            position: relative;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        #datetime {
+            position: relative;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #000;
+            padding: 5px;
+            font-size: 12px;
+            text-align: center;
+            width: 100%;
+            z-index: 1;
+            margin-bottom: 10px;
+            background: none;
+        }
+        #slideshow img {
+            display: block;
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+        #slider-container {
+            width: 50%;
+            margin: 10px auto 0;
+        }
+        #slider {
+            width: 100%;
+        }
+        #controls {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+        button {
+            margin: 0 5px;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+        #loading-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #000;
+            padding: 20px;
+            border-radius: 5px;
+            font-size: 20px;
+            text-align: center;
+            z-index: 2;
+        }
+        #date-range {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #000;
+        }
+        #forecast-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+#update-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#update-button:hover {
+    background-color: #0056b3;
+}
+    </style>
+</head>
+<body>
+
+<div id="link-container">
+    <a href="https://www.surfholic.co.kr/surfholic/wave.php?str_region=%EB%B6%80%EC%82%B0%EB%B3%B8%EC%A0%90" target="_blank">Surfholic CAM</a>
+    <div id="header-content">WSJ Form 🏄</div>
+    <a href="https://www.youtube.com/results?search_query=%EC%86%A1%EC%A0%95%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5+%EC%8B%A4%EC%8B%9C%EA%B0%84" target="_blank">Youtube CAM</a>
+</div>
+
+<div id="main-content">
+    <div id="slideshow-container">
+        <div id="loading-message">Loading... SJ Friends.</div>
+        <div id="slideshow" onclick="handleClick(event)">
+            <div id="datetime"></div>
+            <img src="http://www.imocwx.com/cwm/cwmsjp_00.png?3018a" alt="SJ Friends">
+        </div>
+
+        <div id="slider-container">
+            <input type="range" id="slider" min="0" max="24" step="1" value="0" oninput="updateImage()">
+        </div>
+    </div>
+
+    <div id="controls">
+        <button onclick="prevImage()">&#10094;</button>
+        <button onclick="playSlideshow()">▶</button>
+        <button onclick="pauseSlideshow()">⏸</button>
+        <button onclick="nextImage()">&#10095;</button>
+    </div>
+
+    <div id="date-range"></div> <!-- 차트 기간을 표시할 요소 추가 -->
+    <br>
+
+    <!-- B소스: Windfinder 위젯 -->
+    <div id="forecast-container">
+        <script src="https://www.windfinder.com/widget/forecast/js/songjung_beach?unit_wave=m&unit_rain=mm&unit_temperature=c&unit_wind=m_s&unit_pressure=hPa&days=4&show_day=1"></script>
+        <noscript>
+            <a rel="nofollow" href="https://www.windfinder.com/forecast/songjung_beach?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-forecast">Wind forecast for Songjung Beach</a> provided by 
+            <a rel="nofollow" href="https://www.windfinder.com?utm_source=forecast&utm_medium=web&utm_campaign=homepageweather&utm_content=noscript-logo">windfinder.com</a>
+        </noscript>
+    </div>
+</div>
+
+<a id="update-button" href="http://naver.me/xMj04LpQ" target="_blank">업데이트 확인</a>
+
+
+
+<script>
+    // 이미지 URL 리스트를 생성합니다.
+    const imageUrls = Array.from({ length: 25 }, (_, i) => `http://www.imocwx.com/cwm/cwmsjp_${i.toString().padStart(2, '0')}.png?3018a`);
+    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토']; // 요일 리스트를 생성합니다.
+    let currentIndex = 0; // 현재 슬라이드 인덱스를 0으로 초기화합니다.
+    let interval; // 슬라이드쇼 인터벌을 저장할 변수를 선언합니다.
+    let baseDateTime; // 기준 날짜와 시간을 저장할 변수를 선언합니다.
+    let totalImages = imageUrls.length; // 전체 이미지 개수를 저장합니다.
+    let loadedImages = 0; // 로드된 이미지 개수를 초기화합니다.
+    let preloadedImages = []; // 미리 로드된 이미지를 저장할 배열을 선언합니다.
+
+    // 기준 날짜와 시간을 계산하는 함수입니다.
+    function calculateBaseDateTime() {
+        const now = new Date(); // 현재 시간을 가져옵니다.
+        const hours = now.getHours(); // 현재 시간의 시(hour)를 가져옵니다.
+        let baseDate = new Date(now); // 기준 날짜를 현재 시간으로 초기화합니다.
+
+        // 기준 시간을 설정합니다.
+        if (hours >= 1 && hours < 7) {
+            baseDate.setDate(baseDate.getDate() - 1);
+            baseDate.setHours(21, 0, 0, 0);
+        } else if (hours >= 7 && hours < 13) {
+            baseDate.setHours(3, 0, 0, 0);
+        } else if (hours >= 13 && hours < 19) {
+            baseDate.setHours(9, 0, 0, 0);
+        } else {
+            baseDate.setHours(15, 0, 0, 0);
+        }
+
+        baseDateTime = baseDate; // 기준 날짜와 시간을 저장합니다.
+    }
+
+    // 날짜와 시간을 포맷하는 함수입니다.
+    function formatDateTime(date) {
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const dayOfWeek = daysOfWeek[date.getDay()];
+        return `${day}일(${dayOfWeek}) ${hours}시`;
+    }
+
+    // 이미지의 날짜와 시간을 계산하는 함수입니다.
+    function getImageDateTime(index) {
+        const imageDate = new Date(baseDateTime);
+        imageDate.setHours(baseDateTime.getHours() + index * 3);
+        return formatDateTime(imageDate);
+    }
+
+    // 슬라이드쇼를 업데이트하는 함수입니다.
+    function updateSlideshow() {
+        const img = preloadedImages[currentIndex]; // 미리 로드된 이미지를 사용합니다.
+        
+        const datetimeDiv = document.getElementById('datetime');
+        datetimeDiv.textContent = getImageDateTime(currentIndex);
+
+        const slideshow = document.getElementById('slideshow');
+        slideshow.innerHTML = '';
+        slideshow.appendChild(datetimeDiv);
+        slideshow.appendChild(img);
+        document.getElementById('slider').value = currentIndex;
+    }
+
+    // 로딩 메시지를 업데이트하는 함수입니다.
+    function updateLoadingMessage() {
+        const messageElement = document.getElementById('loading-message');
+        messageElement.textContent = `차트 불러오는중 SJ Friends${'.'.repeat((loadedImages % 4) + 1)}`;
+        
+        if (loadedImages >= totalImages) {
+            messageElement.style.display = 'none'; // 모든 이미지 로딩이 완료되면 메시지를 숨김
+        }
+    }
+
+    // 슬라이더 값이 변경될 때 이미지를 업데이트하는 함수입니다.
+    function updateImage() {
+        currentIndex = parseInt(document.getElementById('slider').value);
+        updateSlideshow();
+    }
+
+    // 이전 이미지를 표시하는 함수입니다.
+    function prevImage() {
+        currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
+        updateSlideshow();
+    }
+
+    // 다음 이미지를 표시하는 함수입니다.
+    function nextImage() {
+        currentIndex = (currentIndex + 1) % imageUrls.length;
+        updateSlideshow();
+    }
+
+    // 슬라이드쇼를 재생하는 함수입니다.
+    function playSlideshow() {
+        interval = setInterval(nextImage, 500);
+    }
+
+    // 슬라이드쇼를 일시 중지하는 함수입니다.
+    function pauseSlideshow() {
+        clearInterval(interval);
+    }
+
+    // 슬라이드쇼를 클릭했을 때 이전/다음 이미지를 표시하는 함수입니다.
+    function handleClick(event) {
+        const rect = document.getElementById('slideshow').getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        x < rect.width / 2 ? prevImage() : nextImage();
+    }
+
+    // 이미지를 미리 로드하는 함수입니다.
+    function preloadImages(urls) {
+        urls.forEach((url, index) => {
+            const img = new Image();
+            img.src = url;
+            img.alt = `서핑 이미지 ${index + 1}`;
+            img.onload = () => {
+                loadedImages++;
+                updateLoadingMessage();
+            };
+            preloadedImages.push(img); // 미리 로드된 이미지를 배열에 추가합니다.
+        });
+    }
+
+    // 차트 기간을 표시하는 함수입니다.
+    function displayDateRange() {
+        const startDateTime = getImageDateTime(0); // 첫 이미지의 날짜와 시간
+        const endDateTime = getImageDateTime(imageUrls.length - 1); // 마지막 이미지의 날짜와 시간
+        const dateRangeElement = document.getElementById('date-range');
+        dateRangeElement.textContent = `차트 기간: ${startDateTime} ~ ${endDateTime}`;
+    }
+
+    // 초기 설정을 수행합니다.
+    calculateBaseDateTime();
+    preloadImages(imageUrls);
+    updateSlideshow();
+    displayDateRange(); // 페이지 로드 시 차트 기간 표시
+</script>
+
+</body>
+</html>
