@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>간단차트</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            padding: 20px;
+            background-color: #ecf0f1;
+            margin: 0;
+        }
+        .header-container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 0 20px;
+            background-color: #ecf0f1;
+        }
+        label {
+            font-weight: bold;
+            color: #34495e;
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #bdc3c7;
+            background-color: #fff;
+            cursor: pointer;
+            margin-right: 20px;
+        }
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #3498db;
+            color: #fff;
+            font-weight: bold;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tbody tr:hover {
+            background-color: #ecf0f1;
+        }
+        .text-good {
+            color: #28a745; /* Green */
+        }
+        .text-normal {
+            color: #ffc107; /* Yellow */
+        }
+        .text-bad {
+            color: #dc3545; /* Red */
+        }
+        .hidden {
+            display: none;
+        }
+        .footer {
+            text-align: left;
+            padding: 20px;
+            background-color: #ecf0f1;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>간단차트</h1>
+    <div class="header-container">
+        <label for="beach-select">Select Beach :</label>
+        <select id="beach-select">
+            <!-- Beach options will be populated here -->
+        </select>
+    </div>
+    
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>날짜</th>
+                <th>비고</th>
+                <th>수온 (°C)</th>
+                <th>파고 (m)</th>
+                <th>간격 (s)</th>
+                <th>풍속 (m/s)</th>
+                <th>추천</th>
+                <th class="hidden">NAME</th>
+                <th class="hidden">Latitude</th>
+                <th class="hidden">Longitude</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data rows will be inserted here -->
+        </tbody>
+    </table>
+
+    <div class="footer">
+<a href="http://www.youtube.com/@sj_friends" target="_blank"><img src=./sjf.jpg width=30%></a>
+<br> 
+<a href="https://www.instagram.com/park_sang_joon_/" class="dm-link" target="_blank"><img src=./dm.jpg width=30%></a>
+<br>
+제공 : 국립해양조사원 OPEN API
+    </div>
+
+    <script>
+        const apiUrl = 'https://www.khoa.go.kr/api/oceangrid/fcIndexOfType/search.do?ServiceKey=hXagtedEp8OS2StvaOFc9A==&Type=SR&ResultType=json';
+        let allData = [];
+
+        async function fetchData() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data && data.result && data.result.data) {
+                    allData = data.result.data;
+                    populateBeachSelect();
+                    populateTable('송정해수욕장'); // Initial load for 송정해수욕장
+                } else {
+                    console.error('Data format is incorrect:', data);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function formatDate(dateStr) {
+            const [year, month, day] = dateStr.split('-').map(Number);
+            const date = new Date(year, month - 1, day);
+            const days = ["일", "월", "화", "수", "목", "금", "토"];
+            const dayName = days[date.getDay()];
+            return `${month}.${day}(${dayName})`;
+        }
+
+        function convertWindSpeed(kmh) {
+            return (kmh * 0.27778).toFixed(2); // Convert km/h to m/s and round to 2 decimal places
+        }
+
+        function populateBeachSelect() {
+            const beachSelect = document.getElementById('beach-select');
+            const uniqueBeaches = [...new Set(allData.map(entry => entry.name))];
+            
+            beachSelect.innerHTML = ''; // Clear existing options
+
+            // Create an option for 송정해수욕장 by default
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '송정해수욕장';
+            defaultOption.textContent = '송정해수욕장';
+            beachSelect.appendChild(defaultOption);
+
+            uniqueBeaches.forEach(beach => {
+                if (beach !== '송정해수욕장') {
+                    const option = document.createElement('option');
+                    option.value = beach;
+                    option.textContent = beach;
+                    beachSelect.appendChild(option);
+                }
+            });
+
+            beachSelect.addEventListener('change', (event) => {
+                populateTable(event.target.value);
+            });
+        }
+
+        function populateTable(beachName) {
+            const tableBody = document.querySelector('#data-table tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            const filteredData = allData.filter(entry => entry.name === beachName);
+
+            filteredData.forEach(entry => {
+                const row = document.createElement('tr');
+                const scoreClass = getScoreClass(entry.total_score.trim());
+                
+                row.innerHTML = `
+                    <td>${formatDate(entry.date)}</td>
+                    <td>${entry.time_type === '일' ? '하루예보' : entry.time_type}</td>
+                    <td>${entry.water_temp}</td>
+                    <td>${entry.wave_height}</td>
+                    <td>${entry.wave_period}</td>
+                    <td>${convertWindSpeed(entry.wind_speed)}</td>
+                    <td class="${scoreClass}">${entry.total_score}</td>
+                    <td class="hidden">${entry.name}</td>
+                    <td class="hidden">${entry.lat}</td>
+                    <td class="hidden">${entry.lon}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function getScoreClass(score) {
+            switch (score) {
+                case '좋음':
+                    return 'text-good';
+                case '보통':
+                    return 'text-normal';
+                case '나쁨':
+                    return 'text-bad';
+                default:
+                    return ''; // Default class (no specific color)
+            }
+        }
+
+        // Fetch data and populate dropdown and table on page load
+        fetchData();
+    </script>
+</body>
+</html>
