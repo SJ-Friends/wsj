@@ -78,17 +78,16 @@
             display: none;
         }
         .footer {
-            text-align: center; /* Center align footer content */
-            padding: 2px;
-            background-color: #fff; /* Background color set to white */
-            margin-top: 10px;
             display: flex;
             justify-content: space-between; /* Distribute space between items */
             align-items: center;
+            padding: 20px;
+            background-color: #fff; /* Background color set to white */
+            margin-top: 20px;
         }
         .footer img {
-            vertical-align: middle;
-            width: 60%; /* Default width for the images */
+            width: 60%; /* Set image width to 60% */
+            max-width: 300px; /* Max width to prevent overly large images */
         }
 
         /* Media Query for Mobile Devices */
@@ -98,7 +97,7 @@
                 padding: 8px; /* Reduced padding for mobile */
             }
             .footer img {
-                width: 25%; /* Adjust image size for mobile */
+                width: 60%; /* Image size for mobile */
             }
             select {
                 font-size: 12px; /* Further reduced font size for mobile */
