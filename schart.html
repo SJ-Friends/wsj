@@ -76,16 +76,17 @@
             display: none;
         }
         .footer {
-            text-align: left;
+            text-align: center; /* Center align footer content */
             padding: 20px;
             background-color: #fff; /* Background color set to white */
             margin-top: 20px;
             display: flex;
+            justify-content: space-between; /* Distribute space between items */
             align-items: center;
-            gap: 1px;
         }
         .footer img {
             vertical-align: middle;
+            width: 30%; /* Default width for the images */
         }
 
         /* Media Query for Mobile Devices */
@@ -95,7 +96,7 @@
                 padding: 8px; /* Reduced padding for mobile */
             }
             .footer img {
-                width: 20%; /* Adjust image size for mobile */
+                width: 25%; /* Adjust image size for mobile */
             }
         }
     </style>
@@ -128,9 +129,13 @@
             <!-- Data rows will be inserted here -->
         </tbody>
     </table> 
-    <a href="http://www.youtube.com/@sj_friends" target="_blank"><img src="./sjf.jpg" width="30%" alt="SJ Friends YouTube Channel"></a>   DM to <a href="https://www.instagram.com/park_sang_joon_/" target="_blank"><img src="./dm.jpg" width="10%" alt="Send DM on Instagram"></a>
-    <br><br>
-    <font size=1>Data:국립해양조사원 OPEN API</font>
+    <div class="footer">
+        <a href="http://www.youtube.com/@sj_friends" target="_blank"><img src="./sjf.jpg" alt="SJ Friends YouTube Channel"></a>
+        <a href="https://www.instagram.com/park_sang_joon_/" target="_blank"><img src="./dm.jpg" alt="Send DM on Instagram"></a>
+    </div>
+    <div class="footer">
+        <span>제공 : 국립해양조사원 OPEN API</span>
+    </div>
 
     <script>
         const apiUrl = 'https://www.khoa.go.kr/api/oceangrid/fcIndexOfType/search.do?ServiceKey=hXagtedEp8OS2StvaOFc9A==&Type=SR&ResultType=json';
