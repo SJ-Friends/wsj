@@ -87,6 +87,17 @@
         .footer img {
             vertical-align: middle;
         }
+
+        /* Media Query for Mobile Devices */
+        @media (max-width: 600px) {
+            th, td {
+                font-size: 12px; /* Smaller font size for mobile */
+                padding: 8px; /* Reduced padding for mobile */
+            }
+            .footer img {
+                width: 20%; /* Adjust image size for mobile */
+            }
+        }
     </style>
 </head>
 <body>
@@ -103,10 +114,10 @@
             <tr>
                 <th>날짜</th>
                 <th>비고</th>
-                <th>수온 (°C)</th>
-                <th>파고 (m)</th>
-                <th>간격 (s)</th>
-                <th>풍속 (m/s)</th>
+                <th>수온</th>
+                <th>파고</th>
+                <th>간격</th>
+                <th>풍속</th>
                 <th>추천</th>
                 <th class="hidden">NAME</th>
                 <th class="hidden">Latitude</th>
@@ -120,9 +131,10 @@
 
     <div class="footer">
         <a href="http://www.youtube.com/@sj_friends" target="_blank"><img src="./sjf.jpg" width="30%" alt="SJ Friends YouTube Channel"></a>
-        <a href="https://www.instagram.com/park_sang_joon_/" target="_blank"><img src="./dm.jpg" width="30%" alt="Send DM on Instagram"></a>      
+        <a href="https://www.instagram.com/park_sang_joon_/" target="_blank"><img src="./dm.jpg" width="30%" alt="Send DM on Instagram"></a>
+        <span>제공 : 국립해양조사원 OPEN API</span>
     </div>
-<br>   제공 : 국립해양조사원 OPEN API
+
     <script>
         const apiUrl = 'https://www.khoa.go.kr/api/oceangrid/fcIndexOfType/search.do?ServiceKey=hXagtedEp8OS2StvaOFc9A==&Type=SR&ResultType=json';
         let allData = [];
@@ -194,7 +206,7 @@
                 
                 row.innerHTML = `
                     <td>${formatDate(entry.date)}</td>
-                    <td>${entry.time_type === '일' ? '하루' : entry.time_type}</td>
+                    <td>${entry.time_type === '일' ? '하루예보' : entry.time_type}</td>
                     <td>${entry.water_temp}</td>
                     <td>${entry.wave_height}</td>
                     <td>${entry.wave_period}</td>
