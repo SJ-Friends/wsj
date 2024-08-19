@@ -9,7 +9,7 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            background-color: #fff; /* Page background color set to white */
         }
         h1 {
             color: #2c3e50;
@@ -42,7 +42,7 @@
             width: 90%;
             margin: 20px auto;
             border-collapse: collapse;
-            background-color: #fff;
+            background-color: #fff; /* Table background color */
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -78,8 +78,14 @@
         .footer {
             text-align: left;
             padding: 20px;
-            background-color: #ecf0f1;
+            background-color: #fff; /* Background color set to white */
             margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .footer img {
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -113,13 +119,10 @@
     </table>
 
     <div class="footer">
-<a href="http://www.youtube.com/@sj_friends" target="_blank"><img src=./sjf.jpg width=30%></a>
-<br> 
-<a href="https://www.instagram.com/park_sang_joon_/" class="dm-link" target="_blank"><img src=./dm.jpg width=30%></a>
-<br>
-제공 : 국립해양조사원 OPEN API
+        <a href="http://www.youtube.com/@sj_friends" target="_blank"><img src="./sjf.jpg" width="30%" alt="SJ Friends YouTube Channel"></a>
+        <a href="https://www.instagram.com/park_sang_joon_/" target="_blank"><img src="./dm.jpg" width="30%" alt="Send DM on Instagram"></a>      
     </div>
-
+<br>   제공 : 국립해양조사원 OPEN API
     <script>
         const apiUrl = 'https://www.khoa.go.kr/api/oceangrid/fcIndexOfType/search.do?ServiceKey=hXagtedEp8OS2StvaOFc9A==&Type=SR&ResultType=json';
         let allData = [];
@@ -146,7 +149,7 @@
             const date = new Date(year, month - 1, day);
             const days = ["일", "월", "화", "수", "목", "금", "토"];
             const dayName = days[date.getDay()];
-            return `${month}.${day}(${dayName})`;
+            return `${day}(${dayName})`; // Only show day and dayName
         }
 
         function convertWindSpeed(kmh) {
@@ -191,7 +194,7 @@
                 
                 row.innerHTML = `
                     <td>${formatDate(entry.date)}</td>
-                    <td>${entry.time_type === '일' ? '하루예보' : entry.time_type}</td>
+                    <td>${entry.time_type === '일' ? '하루' : entry.time_type}</td>
                     <td>${entry.water_temp}</td>
                     <td>${entry.wave_height}</td>
                     <td>${entry.wave_period}</td>
