@@ -85,19 +85,30 @@
             background-color: #fff; /* Background color set to white */
             margin-top: 20px;
         }
+        .footer a {
+            display: flex;
+            align-items: center;
+        }
         .footer img {
-            width: 60%; /* Set image width to 60% */
+            width: 60%; /* Set image width to 60% of its container */
             max-width: 300px; /* Max width to prevent overly large images */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .footer .left-img {
+            margin-right: auto; /* Pushes image to the left */
+        }
+        .footer .right-img {
+            margin-left: auto; /* Pushes image to the right */
         }
 
         /* Media Query for Mobile Devices */
         @media (max-width: 600px) {
             th, td {
                 font-size: 12px; /* Smaller font size for mobile */
-                padding: 1px; /* Reduced padding for mobile */
+                padding: 8px; /* Reduced padding for mobile */
             }
             .footer img {
-                width: 40%; /* Image size for mobile */
+                width: 60%; /* Image size for mobile */
             }
             select {
                 font-size: 12px; /* Further reduced font size for mobile */
@@ -133,10 +144,10 @@
         <tbody>
             <!-- Data rows will be inserted here -->
         </tbody>
-    </table> 
+    </table>
     <div class="footer">
-        <a href="http://www.youtube.com/@sj_friends" target="_blank"><img src="./sjf.jpg" alt="SJ Friends YouTube Channel"></a>
-        <a href="https://www.instagram.com/park_sang_joon_/" target="_blank"><img src="./dm.jpg" alt="Send DM on Instagram"></a>
+        <a href="http://www.youtube.com/@sj_friends" target="_blank" class="left-img"><img src="./sjf.jpg" alt="SJ Friends YouTube Channel"></a>
+        <a href="https://www.instagram.com/park_sang_joon_/" target="_blank" class="right-img"><img src="./dm.jpg" alt="Send DM on Instagram"></a>
     </div>
     <div class="footer">
         <span>제공 : 국립해양조사원 OPEN API</span>
