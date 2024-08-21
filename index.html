@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #ffffff;
+            background-color: #f0f0f0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -44,7 +44,7 @@
             background-color: #d0e4ff;
         }
         #header-content {
-            font-size: 100%; /* 텍스트 크기를 60%로 설정 */
+            font-size: 100%; /* 텍스트 크기를 100%로 설정 */
             font-weight: bold;
             white-space: nowrap;
         }
@@ -117,7 +117,7 @@
             border-radius: 5px;
             font-size: 20px;
             text-align: center;
-            z-index: 2;
+            z-index: 1000;
         }
         #date-range {
             margin-top: 10px;
@@ -129,22 +129,21 @@
             width: 100%;
             max-width: 800px;
         }
-#update-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-}
-
-#update-button:hover {
-    background-color: #0056b3;
-}
+        #update-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        #update-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -152,7 +151,7 @@
 <div id="link-container">
     <a href="https://www.surfholic.co.kr/surfholic/wave.php?str_region=%EB%B6%80%EC%82%B0%EB%B3%B8%EC%A0%90" target="_blank">Surfholic CAM</a>
     <div id="header-content">WSJ Form 🏄</div>
-    <a href="https://www.youtube.com/live/LPQ6QWBqE0g?si=h2vwcyc4SpSmGO6o" target="_blank">Youtube CAM</a>
+    <a href="https://www.youtube.com/results?search_query=%EC%86%A1%EC%A0%95%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5+%EC%8B%A4%EC%8B%9C%EA%B0%84" target="_blank">Youtube CAM</a>
 </div>
 
 <div id="main-content">
@@ -188,29 +187,23 @@
     </div>
 </div>
 
-<a href="http://www.youtube.com/@sj_friends" target="_blank"><img src=./sjf.jpg width=30%></a><br>
-<a href="./schart.html" target="_blank>서핑지수</a> 
-
-
+<a id="update-button" href="http://naver.me/xMj04LpQ" target="_blank">업데이트 확인</a>
 
 <script>
-    // 이미지 URL 리스트를 생성합니다.
     const imageUrls = Array.from({ length: 25 }, (_, i) => `http://www.imocwx.com/cwm/cwmsjp_${i.toString().padStart(2, '0')}.png?3018a`);
-    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토']; // 요일 리스트를 생성합니다.
-    let currentIndex = 0; // 현재 슬라이드 인덱스를 0으로 초기화합니다.
-    let interval; // 슬라이드쇼 인터벌을 저장할 변수를 선언합니다.
-    let baseDateTime; // 기준 날짜와 시간을 저장할 변수를 선언합니다.
-    let totalImages = imageUrls.length; // 전체 이미지 개수를 저장합니다.
-    let loadedImages = 0; // 로드된 이미지 개수를 초기화합니다.
-    let preloadedImages = []; // 미리 로드된 이미지를 저장할 배열을 선언합니다.
+    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+    let currentIndex = 0;
+    let interval;
+    let baseDateTime;
+    let preloadedImages = [];
+    let totalImages = imageUrls.length;
+    let loadedImages = 0;
 
-    // 기준 날짜와 시간을 계산하는 함수입니다.
     function calculateBaseDateTime() {
-        const now = new Date(); // 현재 시간을 가져옵니다.
-        const hours = now.getHours(); // 현재 시간의 시(hour)를 가져옵니다.
-        let baseDate = new Date(now); // 기준 날짜를 현재 시간으로 초기화합니다.
+        const now = new Date();
+        const hours = now.getHours();
+        let baseDate = new Date(now);
 
-        // 기준 시간을 설정합니다.
         if (hours >= 1 && hours < 7) {
             baseDate.setDate(baseDate.getDate() - 1);
             baseDate.setHours(21, 0, 0, 0);
@@ -222,10 +215,9 @@
             baseDate.setHours(15, 0, 0, 0);
         }
 
-        baseDateTime = baseDate; // 기준 날짜와 시간을 저장합니다.
+        baseDateTime = baseDate;
     }
 
-    // 날짜와 시간을 포맷하는 함수입니다.
     function formatDateTime(date) {
         const day = date.getDate().toString().padStart(2, '0');
         const hours = date.getHours().toString().padStart(2, '0');
@@ -233,99 +225,74 @@
         return `${day}일(${dayOfWeek}) ${hours}시`;
     }
 
-    // 이미지의 날짜와 시간을 계산하는 함수입니다.
     function getImageDateTime(index) {
-        const imageDate = new Date(baseDateTime);
-        imageDate.setHours(baseDateTime.getHours() + index * 3);
-        return formatDateTime(imageDate);
+        const imageDateTime = new Date(baseDateTime);
+        imageDateTime.setHours(imageDateTime.getHours() + index);
+        return imageDateTime;
     }
 
-    // 슬라이드쇼를 업데이트하는 함수입니다.
-    function updateSlideshow() {
-        const img = preloadedImages[currentIndex]; // 미리 로드된 이미지를 사용합니다.
-        
-        const datetimeDiv = document.getElementById('datetime');
-        datetimeDiv.textContent = getImageDateTime(currentIndex);
-
-        const slideshow = document.getElementById('slideshow');
-        slideshow.innerHTML = '';
-        slideshow.appendChild(datetimeDiv);
-        slideshow.appendChild(img);
-        document.getElementById('slider').value = currentIndex;
+    function updateDateTimeDisplay() {
+        const dateTimeElement = document.getElementById('datetime');
+        const imageDateTime = getImageDateTime(currentIndex);
+        dateTimeElement.textContent = formatDateTime(imageDateTime);
     }
 
-    // 로딩 메시지를 업데이트하는 함수입니다.
-    function updateLoadingMessage() {
-        const messageElement = document.getElementById('loading-message');
-        messageElement.textContent = `차트 불러오는중 SJ Friends${'.'.repeat((loadedImages % 4) + 1)}`;
-        
-        if (loadedImages >= totalImages) {
-            messageElement.style.display = 'none'; // 모든 이미지 로딩이 완료되면 메시지를 숨김
-        }
-    }
-
-    // 슬라이더 값이 변경될 때 이미지를 업데이트하는 함수입니다.
     function updateImage() {
-        currentIndex = parseInt(document.getElementById('slider').value);
-        updateSlideshow();
+        const slideshow = document.getElementById('slideshow');
+        slideshow.querySelector('img').src = preloadedImages[currentIndex].src;
+        updateDateTimeDisplay();
     }
 
-    // 이전 이미지를 표시하는 함수입니다.
+    function preloadImages() {
+        imageUrls.forEach((url, index) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => {
+                loadedImages++;
+                if (loadedImages === totalImages) {
+                    document.getElementById('loading-message').style.display = 'none';
+                    updateImage();
+                }
+            };
+            preloadedImages.push(img);
+        });
+    }
+
     function prevImage() {
-        currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
-        updateSlideshow();
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : totalImages - 1;
+        document.getElementById('slider').value = currentIndex;
+        updateImage();
     }
 
-    // 다음 이미지를 표시하는 함수입니다.
     function nextImage() {
-        currentIndex = (currentIndex + 1) % imageUrls.length;
-        updateSlideshow();
+        currentIndex = (currentIndex < totalImages - 1) ? currentIndex + 1 : 0;
+        document.getElementById('slider').value = currentIndex;
+        updateImage();
     }
 
-    // 슬라이드쇼를 재생하는 함수입니다.
     function playSlideshow() {
-        interval = setInterval(nextImage, 500);
+        interval = setInterval(nextImage, 1000);
     }
 
-    // 슬라이드쇼를 일시 중지하는 함수입니다.
     function pauseSlideshow() {
         clearInterval(interval);
     }
 
-    // 슬라이드쇼를 클릭했을 때 이전/다음 이미지를 표시하는 함수입니다.
     function handleClick(event) {
-        const rect = document.getElementById('slideshow').getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        x < rect.width / 2 ? prevImage() : nextImage();
+        if (interval) {
+            pauseSlideshow();
+        } else {
+            playSlideshow();
+        }
     }
 
-    // 이미지를 미리 로드하는 함수입니다.
-    function preloadImages(urls) {
-        urls.forEach((url, index) => {
-            const img = new Image();
-            img.src = url;
-            img.alt = `서핑 이미지 ${index + 1}`;
-            img.onload = () => {
-                loadedImages++;
-                updateLoadingMessage();
-            };
-            preloadedImages.push(img); // 미리 로드된 이미지를 배열에 추가합니다.
-        });
-    }
+    document.getElementById('slider').addEventListener('input', (event) => {
+        currentIndex = parseInt(event.target.value, 10);
+        updateImage();
+    });
 
-    // 차트 기간을 표시하는 함수입니다.
-    function displayDateRange() {
-        const startDateTime = getImageDateTime(0); // 첫 이미지의 날짜와 시간
-        const endDateTime = getImageDateTime(imageUrls.length - 1); // 마지막 이미지의 날짜와 시간
-        const dateRangeElement = document.getElementById('date-range');
-        dateRangeElement.textContent = `차트 기간: ${startDateTime} ~ ${endDateTime}`;
-    }
-
-    // 초기 설정을 수행합니다.
     calculateBaseDateTime();
-    preloadImages(imageUrls);
-    updateSlideshow();
-    displayDateRange(); // 페이지 로드 시 차트 기간 표시
+    preloadImages();
 </script>
 
 </body>
