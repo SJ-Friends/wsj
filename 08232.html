@@ -85,6 +85,8 @@
             width: 100%;
             height: auto;
             position: relative;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
         #slider-container {
             width: 50%;
@@ -115,7 +117,7 @@
             color: #000;
             padding: 20px;
             border-radius: 5px;
-            font-size: 20px;
+            font-size: 18px;
             text-align: center;
             z-index: 2;
         }
@@ -157,7 +159,7 @@
 
 <div id="main-content">
     <div id="slideshow-container">
-        <div id="loading-message">Loading... SJ Friends.</div>
+        <div id="loading-message">www.imocwx.com으로부터 차트를 받아오는 중입니다. - SJ Friends</div>
         <div id="slideshow" onclick="handleClick(event)">
             <div id="datetime"></div>
             <img id="slide-image" src="http://www.imocwx.com/cwm/cwmsjp_00.png?3018a" alt="SJ Friends">
@@ -272,10 +274,17 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         calculateBaseDateTime();
-        updateImage();
-        document.getElementById('loading-message').style.display = 'none';
-        document.getElementById('slideshow').style.display = 'block';
-        document.getElementById('date-range').textContent = `기준 시각: ${formatDateTime(baseDateTime)}`;
+
+        // 처음 이미지를 로드하고 완료되었을 때 처리
+        const imageElement = document.getElementById('slide-image');
+        imageElement.onload = () => {
+            imageElement.style.opacity = 1; // 이미지 로드 후 표시
+            document.getElementById('loading-message').style.display = 'none'; // 로딩 메시지 숨김
+            document.getElementById('slideshow').style.display = 'block';
+            document.getElementById('date-range').textContent = `기준 시각: ${formatDateTime(baseDateTime)}`;
+        };
+
+        updateImage(); // 초기 이미지 설정
     });
 </script>
 
