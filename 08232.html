@@ -118,7 +118,6 @@
             font-size: 20px;
             text-align: center;
             z-index: 2;
-            display: none;
         }
         #date-range {
             margin-top: 10px;
@@ -142,6 +141,7 @@
             text-decoration: none;
             display: inline-block;
         }
+
         #update-button:hover {
             background-color: #0056b3;
         }
@@ -175,10 +175,9 @@
         <button onclick="nextImage()">&#10095;</button>
     </div>
 
-    <div id="date-range"></div> <!-- 차트 기간을 표시할 요소 추가 -->
+    <div id="date-range"></div>
     <br>
 
-    <!-- B소스: Windfinder 위젯 -->
     <div id="forecast-container">
         <script src="https://www.windfinder.com/widget/forecast/js/songjung_beach?unit_wave=m&unit_rain=mm&unit_temperature=c&unit_wind=m_s&unit_pressure=hPa&days=4&show_day=1"></script>
         <noscript>
@@ -188,7 +187,7 @@
     </div>
 </div>
 
-<a id="update-button" href="https://sj-friends.github.io/wsj/schart.html" target="_blank">서핑지수</a><br>
+<a id="update-button" href="https://sj-friends.github.io/wsj/index.html" target="_blank">업데이트 확인</a><br>
 출처 : www.imocwx.com
 
 <script>
@@ -230,74 +229,53 @@
         return formatDateTime(imageDate);
     }
 
-    function updateDateTime(index) {
-        const dateTimeElement = document.getElementById('datetime');
-        const imageDateTime = getImageDateTime(index);
-        dateTimeElement.textContent = `🗓 ${imageDateTime}`;
-    }
-
     function updateImage() {
-        const slider = document.getElementById('slider');
-        currentIndex = parseInt(slider.value);
         const imageElement = document.getElementById('slide-image');
-        const loadingMessage = document.getElementById('loading-message');
-        
-        // 이미지 로드 전에 로딩 메시지를 표시
-        loadingMessage.style.display = 'block';
-
-        const newImage = new Image();
-        newImage.src = imageUrls[currentIndex];
-        newImage.onload = () => {
-            imageElement.src = newImage.src;
-            loadingMessage.style.display = 'none'; // 로드가 완료되면 로딩 메시지를 숨김
-        };
-
-        updateDateTime(currentIndex);
-        updateDateRange();
+        const datetimeElement = document.getElementById('datetime');
+        imageElement.src = imageUrls[currentIndex];
+        datetimeElement.textContent = getImageDateTime(currentIndex);
+        document.getElementById('slider').value = currentIndex;
     }
 
-    function updateDateRange() {
-        const dateRangeElement = document.getElementById('date-range');
-        const startDate = getImageDateTime(0);
-        const endDate = getImageDateTime(imageUrls.length - 1);
-        dateRangeElement.textContent = `차트 기간: ${startDate} - ${endDate}`;
+    function handleClick(event) {
+        const slideshow = document.getElementById('slideshow');
+        const clickX = event.clientX - slideshow.getBoundingClientRect().left;
+        const slideshowWidth = slideshow.offsetWidth;
+
+        if (clickX > slideshowWidth / 2) {
+            nextImage();
+        } else {
+            prevImage();
+        }
     }
 
     function prevImage() {
         currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
-        document.getElementById('slider').value = currentIndex;
         updateImage();
     }
 
     function nextImage() {
         currentIndex = (currentIndex + 1) % imageUrls.length;
-        document.getElementById('slider').value = currentIndex;
         updateImage();
     }
 
     function playSlideshow() {
-        clearInterval(interval);
-        interval = setInterval(nextImage, 1000);
+        if (!interval) {
+            interval = setInterval(nextImage, 2000);
+        }
     }
 
     function pauseSlideshow() {
         clearInterval(interval);
-    }
-
-    function handleClick(event) {
-        const slider = document.getElementById('slider');
-        const rect = event.currentTarget.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const width = rect.width;
-        const newValue = Math.floor((x / width) * (slider.max - slider.min));
-        slider.value = newValue;
-        updateImage();
+        interval = null;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
         calculateBaseDateTime();
-        updateDateTime(currentIndex);
-        updateDateRange();
+        updateImage();
+        document.getElementById('loading-message').style.display = 'none';
+        document.getElementById('slideshow').style.display = 'block';
+        document.getElementById('date-range').textContent = `기준 시각: ${formatDateTime(baseDateTime)}`;
     });
 </script>
 
