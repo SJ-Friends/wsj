@@ -154,7 +154,7 @@
 <div id="link-container">
     <a href="https://www.surfholic.co.kr/surfholic/wave.php?str_region=%EB%B6%80%EC%82%B0%EB%B3%B8%EC%A0%90" target="_blank">Surfholic CAM</a>
     <div id="header-content">WSJ Form 🏄</div>
-    <a href="https://www.youtube.com/results?search_query=%EC%86%A1%EC%A0%95%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5+%EC%8B%A4%EC%8B%9C%EA%B0%84" target="_blank">Youtube CAM</a>
+    <a href="https://www.youtube.com/results?search_query=%EC%86%A1%EC%A0%95%ED%95%B4%EC%88%98%EC%9A%A9%EC%9E%A5+%EC%8B%A4%EC%8B%9C%EA%B0%84" target="_blank">Youtube CAM</a>
 </div>
 
 <div id="main-content">
@@ -234,9 +234,25 @@
     function updateImage() {
         const imageElement = document.getElementById('slide-image');
         const datetimeElement = document.getElementById('datetime');
+        const loadingMessage = document.getElementById('loading-message');
+
+        imageElement.style.opacity = 0; // 새로운 이미지를 로드하기 전에 투명하게 설정
+        loadingMessage.style.display = 'block'; // 로딩 메시지 표시
+
         imageElement.src = imageUrls[currentIndex];
-        datetimeElement.textContent = getImageDateTime(currentIndex);
-        document.getElementById('slider').value = currentIndex;
+
+        // 이미지가 로드되면 처리
+        imageElement.onload = () => {
+            imageElement.style.opacity = 1; // 이미지 로드 후 표시
+            loadingMessage.style.display = 'none'; // 로딩 메시지 숨김
+            datetimeElement.textContent = getImageDateTime(currentIndex);
+            document.getElementById('slider').value = currentIndex;
+        };
+
+        // 이미지 로딩 실패 시에도 로딩 메시지를 계속 표시
+        imageElement.onerror = () => {
+            loadingMessage.style.display = 'block'; // 로딩 메시지 계속 표시
+        };
     }
 
     function handleClick(event) {
@@ -275,10 +291,9 @@
     document.addEventListener('DOMContentLoaded', () => {
         calculateBaseDateTime();
 
-        // 처음 이미지를 로드하고 완료되었을 때 처리
         const imageElement = document.getElementById('slide-image');
         imageElement.onload = () => {
-            imageElement.style.opacity = 1; // 이미지 로드 후 표시
+            imageElement.style.opacity = 1; // 초기 로딩 완료 후 이미지 표시
             document.getElementById('loading-message').style.display = 'none'; // 로딩 메시지 숨김
             document.getElementById('slideshow').style.display = 'block';
             document.getElementById('date-range').textContent = `기준 시각: ${formatDateTime(baseDateTime)}`;
