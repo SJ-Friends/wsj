@@ -1,41 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Page</title>
-    <script>
-        function loadPage(page, title) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', page, true);
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    document.getElementById('content').innerHTML = xhr.responseText;
-                    history.pushState({page: page}, title, 'index.html'); // URL을 index.html로 유지
-                }
-            };
-            xhr.send();
-        }
-
-        window.onpopstate = function (event) {
-            if (event.state) {
-                loadPage(event.state.page);
-            }
-        };
-
-        // 초기 로딩 시 페이지를 로드하지 않으면 index.html만 보여짐
-        window.onload = function () {
-            loadPage('0823.html', '0823 Page'); // 초기 페이지 로드 시 0823.html 로딩
-        }
-    </script>
+    <title>Redirecting...</title>
+    <meta http-equiv="refresh" content="0; url=./08232.html">
+    <meta http-equiv="refresh" content="0; url=./0823.html">
 </head>
 <body>
-    <nav>
-        <button onclick="loadPage('0823.html', '0823 Page')">Load 0823.html</button>
-    </nav>
-
-    <div id="content">
-        <!-- 0823.html의 콘텐츠가 여기에 로드됩니다. -->
-    </div>
+    <p>Redirecting to the new page...</p>
 </body>
 </html>
