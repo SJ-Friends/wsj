@@ -149,12 +149,20 @@
 	#update-button:hover {
     background-color: #0056b3;
 }
-	 #wsb-farm-container {
-            margin-top: 20px;
-            width: 100%;
-            max-width: 800px;
-            border: none;
-            overflow: hidden;
+        /* iframe을 감싸는 div를 가운데 정렬하는 스타일 */
+        #iframe-container {
+            display: flex;
+            justify-content: center; /* 가로 정렬: 가운데 */
+            align-items: center; /* 세로 정렬: 가운데 */
+            width: 100%; /* 컨테이너 너비를 100%로 설정 */
+            margin-top: 20px; /* 위쪽에 여백 추가 */
+        }
+
+        iframe {
+            width: 100%; /* iframe 너비를 100%로 설정 */
+            max-width: 800px; /* 최대 너비를 설정 */
+            height: 800px; /* 높이를 설정 */
+            border: none; /* 테두리 제거 */
         }
 
  hr {
@@ -199,9 +207,9 @@
     <div id="date-range"></div> <!-- 차트 기간을 표시할 요소 추가 -->
 <hr>
     <!-- WSB Farm 페이지를 iframe으로 삽입 -->
-    <div id="wsb-farm-container">
+<div id="iframe-container">
         <iframe src="https://www.wsbfarm.com/wavecam/WaveChartView?beach=SJ2" frameborder="0" style="width: 90%; height: 800px;"></iframe>
-    </div>
+</div>
 
 	<hr>
 
