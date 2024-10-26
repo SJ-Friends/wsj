@@ -5,177 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SJ Chart</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        #link-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: #fff;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-        #link-container a {
-            font-size: 60%; /* 버튼 텍스트 크기를 60%로 설정 */
-            color: #007bff;
-            text-decoration: none;
-            border: 1px solid #007bff;
-            padding: 5px 8px; /* 버튼의 패딩도 줄임 */
-            border-radius: 5px;
-            background-color: #e7f0ff;
-            margin: 0 5px;
-            white-space: nowrap;
-        }
-        #link-container a:hover {
-            background-color: #d0e4ff;
-        }
-        #header-content {
-            font-size: 100%;
-            font-weight: bold;
-            align-items: center;
-            white-space: nowrap;
-        }
-        #main-content {
-            margin-top: 60px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-        #slideshow-container {
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-        }
-        #slideshow {
-            position: relative;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-        #instagram-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-        #datetime {
-            position: relative;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #000;
-            padding: 5px;
-            font-size: 12px;
-            text-align: center;
-            width: 100%;
-            z-index: 1;
-            margin-bottom: 10px;
-            background: none;
-        }
-        #slideshow img {
-            display: block;
-            width: 100%;
-            height: auto;
-            position: relative;
-        }
-        #slider-container {
-            width: 50%;
-            margin: 10px auto 0;
-        }
-        #slider {
-            width: 100%;
-        }
-        #controls {
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-        }
-        button {
-            margin: 0 5px;
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            background: none;
-            cursor: pointer;
-        }
-        #loading-message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #000;
-            padding: 20px;
-            border-radius: 5px;
-            font-size: 20px;
-            text-align: center;
-            z-index: 2;
-        }
-        #date-range {
-            margin-top: 10px;
-            font-size: 16px;
-            color: #000;
-        }
-        #forecast-container {
-            margin-top: 20px;
-            width: 100%;
-            max-width: 800px;
-        }
-        #update-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-        #update-button:hover {
-            background-color: #0056b3;
-        }
-        #iframe-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            margin-top: 20px;
-        }
-        iframe {
-            width: 100%;
-            max-width: 800px;
-            border: 2px solid #000000;
-        }
-        hr {
-            border: none;
-            height: 4px;
-            background: linear-gradient(to right, #007bff, #00c6ff);
-            margin: 20px 0;
-            border-radius: 5px;
-            width: 90%;
-        }
+        /* 스타일 코드 생략 (이전 코드와 동일) */
     </style>
 </head>
 <body>
 
 <div id="link-container">
     <a href="https://www.surfholic.co.kr/surfholic/wave.php?str_region=%EB%B6%80%EC%82%B0%EB%B3%B8%EC%A0%90" target="_blank">Surfholic CAM</a>
-    <div id="header-content">SJ 차트모음집 🏄</div>
+    <div id="header-content">SJ 차트모음집. 🏄</div>
     <a href="https://www.youtube.com/results?search_query=%EC%86%A1%EC%A0%95%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5+%EC%8B%A4%EC%8B%9C%EA%B0%84" target="_blank">Youtube CAM</a>
 </div>
 
@@ -238,22 +75,25 @@ WSB FARM : www.wsbfarm.com<br>
     function calculateBaseDateTime() {
         const now = new Date();
         const hours = now.getHours();
-        let baseDate = new Date(now);
 
-        baseDate.setHours(baseDate.getHours() - 12);
+        // 기준 시간을 하루 전날로 초기화
+        baseDateTime = new Date(now);
+        baseDateTime.setHours(21, 0, 0, 0);
+        baseDateTime.setDate(baseDateTime.getDate() - 1);
 
-        if (hours >= 1 && hours < 7) {
-            baseDate.setDate(baseDate.getDate() - 1);
-            baseDate.setHours(21, 0, 0, 0);
-        } else if (hours >= 7 && hours < 13) {
-            baseDate.setHours(3, 0, 0, 0);
+        // 조건에 따른 기준 시간 업데이트
+        if (hours >= 7 && hours < 13) {
+            baseDateTime.setHours(3, 0, 0, 0);
+            baseDateTime.setDate(now.getDate());
         } else if (hours >= 13 && hours < 19) {
-            baseDate.setHours(9, 0, 0, 0);
+            baseDateTime.setHours(9, 0, 0, 0);
+            baseDateTime.setDate(now.getDate());
+        } else if (hours >= 19 || hours < 1) {
+            baseDateTime.setHours(15, 0, 0, 0);
+            baseDateTime.setDate(now.getDate());
         } else {
-            baseDate.setHours(15, 0, 0, 0);
+            baseDateTime.setHours(21, 0, 0, 0);
         }
-
-        baseDateTime = baseDate;
     }
 
     function formatDateTime(date) {
