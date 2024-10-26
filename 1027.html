@@ -181,7 +181,7 @@
 
 <div id="link-container">
     <a href="https://www.surfholic.co.kr/surfholic/wave.php?str_region=%EB%B6%80%EC%82%B0%EB%B3%B8%EC%A0%90" target="_blank">Surfholic CAM</a>
-    <div id="header-content">SJ 차트모음집-🏄</div>
+    <div id="header-content">SJ 차트모음집.. 🏄</div>
     <a href="https://www.youtube.com/results?search_query=%EC%86%A1%EC%A0%95%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5+%EC%8B%A4%EC%8B%9C%EA%B0%84" target="_blank">Youtube CAM</a>
 </div>
 
@@ -247,12 +247,25 @@ WSB FARM : www.wsbfarm.com<br>
     let preloadedImages = []; // 미리 로드된 이미지를 저장할 배열을 선언합니다.
 
     // 기준 날짜와 시간을 계산하는 함수입니다.
-    ffunction calculateBaseDateTime() {
-    const now = new Date(); // 현재 시간을 가져옵니다.
-    now.setHours(now.getHours() - 12); // 기준 시간을 현재 시간에서 12시간 전으로 설정합니다.
-    now.setMinutes(0, 0, 0); // 분과 초를 0으로 설정합니다.
-    baseDateTime = now; // 기준 날짜와 시간을 저장합니다.
-}
+    function calculateBaseDateTime() {
+        const now = new Date(); // 현재 시간을 가져옵니다.
+        const hours = now.getHours(); // 현재 시간의 시(hour)를 가져옵니다.
+        let baseDate = new Date(now); // 기준 날짜를 현재 시간으로 초기화합니다.
+
+        // 기준 시간을 설정합니다.
+        if (hours >= 1 && hours < 7) {
+            baseDate.setDate(baseDate.getDate() - 1);
+            baseDate.setHours(21 - 12, 0, 0, 0);
+        } else if (hours >= 7 && hours < 13) {
+            baseDate.setHours(3 - 12, 0, 0, 0);
+        } else if (hours >= 13 && hours < 19) {
+            baseDate.setHours(9 - 12, 0, 0, 0);
+        } else {
+            baseDate.setHours(15 - 12, 0, 0, 0);
+        }
+
+        baseDateTime = baseDate; // 기준 날짜와 시간을 저장합니다.
+    }
 
     // 날짜와 시간을 포맷하는 함수입니다.
     function formatDateTime(date) {
