@@ -254,7 +254,7 @@ WSB FARM : www.wsbfarm.com<br>
 
         // 기준 시간을 설정합니다.
         if (hours >= 1 && hours < 7) {
-            baseDate.setDate(baseDate.getDate() - 1);
+            baseDate.setDate(baseDate.getDate() - 1)-12;
             baseDate.setHours(21, 0, 0, 0);
         } else if (hours >= 7 && hours < 13) {
             baseDate.setHours(3, 0, 0, 0);
