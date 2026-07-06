@@ -256,7 +256,7 @@ function openWavelet() {
     이미지차트 : www.imocwx.com<br>
     윈드파인더 : windfinder.com<br>
     WSB FARM : www.wsbfarm.com<br>
-    더 자세한 정보는 각 사이트를 구독하세요~
+    더 자세한 정보는 각 사이트를 구독하세요~!
 </div>
 
 <script>
@@ -314,7 +314,7 @@ function openWavelet() {
 
     function updateLoadingMessage() {
         const messageElement = document.getElementById('loading-message');
-        messageElement.textContent = `차트 불러오는중 SJ Friends${'.'.repeat((loadedImages % 4) + 1)}`;
+        messageElement.textContent = `차트 불러오는중.. SJ Friends${'.'.repeat((loadedImages % 4) + 1)}`;
         if (loadedImages >= totalImages) {
             messageElement.style.display = 'none';
         }
