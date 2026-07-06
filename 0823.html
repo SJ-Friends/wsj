@@ -180,10 +180,24 @@
 
     <div id="header-content">SJ 차트모음집🏄</div>
 
-    <a href="intent://#Intent;package=com.pittvandewitt.wavelet;scheme=market;S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.pittvandewitt.wavelet;end">
-        Wavelet
-    </a>
+    <a href="#" onclick="openWavelet(); return false;">Wavelet</a>
 </div>
+
+
+
+
+<script>
+function openWavelet() {
+    window.location.href =
+        "intent://details?id=team.phase.wavelet" +
+        "#Intent;" +
+        "scheme=market;" +
+        "package=com.android.vending;" +
+        "S.browser_fallback_url=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dteam.phase.wavelet;" +
+        "end";
+}
+</script>
+    
 
 <div id="main-content">
     <div id="slideshow-container">
